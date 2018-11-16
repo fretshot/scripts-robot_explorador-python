@@ -45,7 +45,7 @@ def readDistance():
     #d = '%.2f'%(distance)
     #distance=distance/100
     #print("Distancia: %.2f mts." % distance)
-    return distance
+    return distance-5
 
 
 while True:
@@ -54,22 +54,21 @@ while True:
 	s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
 	try:
-		s.connect(("192.168.1.64", 8888)) #IP Smartphone
+		s.connect(("192.168.1.66", 8888)) #IP Smartphone
 		distancia = readDistance()
-		humedad,temperatura = Adafruit_DHT.read_retry(Adafruit_DHT.DHT11,21)
-		
+		humedad,temperatura = Adafruit_DHT.read(Adafruit_DHT.DHT11,21)
 		#print("Temperatura={0:0.1f}°C Humedad={1:0.1f}%".format(temperatura,humedad))
 		cadena=str(temperatura)+","+str(humedad)+","+str('%.2f'%(distancia))
 		s.send(bytes(cadena+"\r\n",'UTF-8'))
 		print(">> ",localtime," Mensaje Enviado...", cadena)
 		s.close()
-		time.sleep(1)
+		time.sleep(0.5)
 	except KeyboardInterrupt:
                 print("Bye bye :)")
                 sys.exit()
 
 	except Exception as e:
 		print(">> ",localtime," Primero inicie la interfaz de Endurance... ",e)
-		time.sleep(1)
+		time.sleep(0.5)
 
 
